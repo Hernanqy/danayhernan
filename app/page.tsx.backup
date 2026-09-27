@@ -1,0 +1,401 @@
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+type Respuesta = "si" | "duda" | "no" | null;
+
+const escenas = [
+  {
+    id: 1,
+    tipo: "inicio",
+    imagen: "/ilustraciones/escena-1.png",
+  },
+  {
+    id: 2,
+    tipo: "fecha",
+    imagen: "/ilustraciones/escena-2.png",
+  },
+  {
+    id: 3,
+    tipo: "dia",
+    imagen: "/ilustraciones/escena-3.png",
+  },
+  {
+    id: 4,
+    tipo: "civil",
+    imagen: "/ilustraciones/escena-4.png",
+  },
+  {
+    id: 5,
+    tipo: "respuesta",
+    imagen: "/ilustraciones/escena-5.png",
+  },
+];
+
+export default function Home() {
+  const [pantalla, setPantalla] = useState(0);
+
+  const siguiente = () => {
+    if (pantalla < escenas.length - 1) {
+      setPantalla((prev) => prev + 1);
+    }
+  };
+
+  const anterior = () => {
+    if (pantalla > 0) {
+      setPantalla((prev) => prev - 1);
+    }
+  };
+
+  useEffect(() => {
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") siguiente();
+      if (event.key === "ArrowLeft") anterior();
+    };
+
+    window.addEventListener("keydown", handleKey);
+
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [pantalla]);
+
+  return (
+    <main className="experiencia">
+      <AnimatePresence mode="wait">
+        <motion.section
+          key={pantalla}
+          className="pantalla"
+          initial={{ opacity: 0, x: 70 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -70 }}
+          transition={{
+            duration: 0.65,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          {pantalla === 0 && <PantallaInicio siguiente={siguiente} />}
+
+          {pantalla === 1 && <PantallaGuardaFecha siguiente={siguiente} />}
+
+          {pantalla === 2 && <PantallaFecha siguiente={siguiente} />}
+
+          {pantalla === 3 && <PantallaCivil siguiente={siguiente} />}
+
+          {pantalla === 4 && <PantallaRespuesta />}
+        </motion.section>
+      </AnimatePresence>
+
+      <Indicador pantalla={pantalla} total={escenas.length} />
+
+      {pantalla > 0 && pantalla < escenas.length - 1 && (
+        <button className="volver" onClick={anterior}>
+          Ã¢â€ Â
+        </button>
+      )}
+    </main>
+  );
+}
+
+function PantallaInicio({ siguiente }: { siguiente: () => void }) {
+  return (
+    <div className="contenido portada" onClick={siguiente}>
+      <motion.div
+        className="texto-central portada-texto"
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <h1 className="nombres">
+          <span>Hernán</span>
+          <span className="y">y</span>
+          <span>Dana</span>
+        </h1>
+
+        <div className="linea-portada" />
+
+        <p className="fecha-principal">
+          4 de diciembre 2026
+        </p>
+      </motion.div>
+
+      <Continuar />
+    </div>
+  );
+}
+function PantallaGuardaFecha({ siguiente }: { siguiente: () => void }) {
+  return (
+    <div className="contenido" onClick={siguiente}>
+      <motion.div
+        className="frase-grande"
+        initial={{ opacity: 0, scale: 0.88 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <span>guardÃƒ¡</span>
+        <strong>la fecha</strong>
+      </motion.div>
+
+      <Ilustracion src="/ilustraciones/escena-2.png" />
+
+      <Continuar />
+    </div>
+  );
+}
+
+function PantallaFecha({ siguiente }: { siguiente: () => void }) {
+  return (
+    <div className="contenido" onClick={siguiente}>
+      <motion.div
+        className="fecha-gigante"
+        initial={{ opacity: 0, y: 35 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <p>04</p>
+
+        <span>DICIEMBRE</span>
+
+        <p>2026</p>
+      </motion.div>
+
+      <Ilustracion src="/ilustraciones/escena-3.png" />
+
+      <Continuar />
+    </div>
+  );
+}
+
+function PantallaCivil({ siguiente }: { siguiente: () => void }) {
+  return (
+    <div className="contenido" onClick={siguiente}>
+      <motion.div
+        className="civil"
+        initial={{ opacity: 0, rotate: -2, y: 20 }}
+        animate={{ opacity: 1, rotate: 0, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
+        <span className="mini">NOS CASAMOS</span>
+
+        <h2>Civil</h2>
+
+        <div className="datos">
+          <p>4 Ã‚Â· 12 Ã‚Â· 2026</p>
+          <strong>13 hs</strong>
+        </div>
+      </motion.div>
+
+      <Ilustracion src="/ilustraciones/escena-4.png" />
+
+      <Continuar texto="una ÃƒÂºltima pregunta" />
+    </div>
+  );
+}
+
+function PantallaRespuesta() {
+  const [nombre, setNombre] = useState("");
+  const [respuesta, setRespuesta] = useState<Respuesta>(null);
+  const [enviado, setEnviado] = useState(false);
+
+  const enviarRespuesta = () => {
+    if (!nombre.trim() || !respuesta) return;
+
+    const datos = {
+      nombre,
+      respuesta,
+      fecha: new Date().toISOString(),
+    };
+
+    localStorage.setItem(
+      "respuesta-casamiento",
+      JSON.stringify(datos)
+    );
+
+    setEnviado(true);
+  };
+
+  if (enviado) {
+    return (
+      <div className="contenido gracias">
+        <motion.div
+          className="gracias-card"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <div className="corazon-grande">♡</div>
+
+          <h2>¡Gracias!</h2>
+
+          <p>Ya tenemos tu respuesta.</p>
+
+          <div className="firma-final">
+            Hernán y Dana
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="contenido respuesta nueva-respuesta">
+      <motion.div
+        className="respuesta-contenido"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <p className="pregunta-mini">
+          UNA ÚLTIMA COSA...
+        </p>
+
+        <h2 className="venis">
+          ¿Venís?
+        </h2>
+
+        <p className="subtitulo-rsvp">
+          Queremos saber si vas a acompañarnos.
+        </p>
+
+        <div className="nombre-box">
+          <span>Tu nombre</span>
+
+          <input
+            type="text"
+            placeholder="Nombre y apellido"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
+        </div>
+
+        <div className="eleccion-rsvp">
+
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            className={`respuesta-card si ${
+              respuesta === "si" ? "activa" : ""
+            }`}
+            onClick={() => setRespuesta("si")}
+          >
+            <div className="respuesta-icono">
+              ♡
+            </div>
+
+            <div className="respuesta-texto">
+              <strong>Sí, voy</strong>
+              <span>¡Nos vemos ahí!</span>
+            </div>
+
+            <div className="check">
+              {respuesta === "si" ? "✓" : ""}
+            </div>
+          </motion.button>
+
+
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            className={`respuesta-card duda ${
+              respuesta === "duda" ? "activa" : ""
+            }`}
+            onClick={() => setRespuesta("duda")}
+          >
+            <div className="respuesta-icono">
+              ◌
+            </div>
+
+            <div className="respuesta-texto">
+              <strong>Todavía no sé</strong>
+              <span>Te confirmo pronto</span>
+            </div>
+
+            <div className="check">
+              {respuesta === "duda" ? "✓" : ""}
+            </div>
+          </motion.button>
+
+
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            className={`respuesta-card no ${
+              respuesta === "no" ? "activa" : ""
+            }`}
+            onClick={() => setRespuesta("no")}
+          >
+            <div className="respuesta-icono">
+              ×
+            </div>
+
+            <div className="respuesta-texto">
+              <strong>No voy a poder</strong>
+              <span>Pero los acompaño de corazón</span>
+            </div>
+
+            <div className="check">
+              {respuesta === "no" ? "✓" : ""}
+            </div>
+          </motion.button>
+
+        </div>
+
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          className="confirmar-rsvp"
+          disabled={!nombre.trim() || !respuesta}
+          onClick={enviarRespuesta}
+        >
+          Confirmar mi respuesta
+          <span>→</span>
+        </motion.button>
+
+      </motion.div>
+    </div>
+  );
+}
+function Ilustracion({ src }: { src: string }) {
+  return (
+    <motion.img
+      src={src}
+      className="ilustracion"
+      alt=""
+      initial={{ opacity: 0, y: 20, rotate: -2 }}
+      animate={{ opacity: 1, y: 0, rotate: 0 }}
+      transition={{ duration: 0.8, delay: 0.1 }}
+      onError={(event) => {
+        event.currentTarget.style.display = "none";
+      }}
+    />
+  );
+}
+
+function Continuar({ texto = "tocÃƒ¡ para continuar" }: { texto?: string }) {
+  return (
+    <motion.div
+      className="continuar"
+      animate={{ y: [0, 5, 0] }}
+      transition={{
+        duration: 1.8,
+        repeat: Infinity,
+      }}
+    >
+      {texto}
+      <span>Ã¢â€ “</span>
+    </motion.div>
+  );
+}
+
+function Indicador({
+  pantalla,
+  total,
+}: {
+  pantalla: number;
+  total: number;
+}) {
+  return (
+    <div className="indicador">
+      {Array.from({ length: total }).map((_, index) => (
+        <span
+          key={index}
+          className={index === pantalla ? "activo" : ""}
+        />
+      ))}
+    </div>
+  );
+}
