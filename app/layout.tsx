@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Hernán & Dana | 4 de diciembre 2026",
-  description: "Guardá la fecha · Hernán & Dana · 4 de diciembre 2026",
+  description: "Guardá la fecha · Hernán y Dana · 4 de diciembre 2026",
 };
 
 export default function RootLayout({
