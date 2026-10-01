@@ -131,7 +131,7 @@ function CoverScreen({
         }}
       >
         <p className="names">
-          {"DANA & HERN\u00C1N"}
+          {"DANA y HERN\u00C1N"}
         </p>
 
         <motion.div
