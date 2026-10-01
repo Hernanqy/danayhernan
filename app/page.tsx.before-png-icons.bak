@@ -363,86 +363,25 @@ function CelebrationScreen({
         </a>
 
         <div className="party-icons">
+          <FloatingIcon delay={0}>
+            <CakeIcon />
+          </FloatingIcon>
 
-          <motion.div
-            className="party-png-wrap"
-            animate={{
-              y: [0, -6, 0],
-              rotate: [0, -1.5, 0, 1.5, 0],
-            }}
-            transition={{
-              duration: 4.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <img
-              src="/icons/t.png"
-              alt="Termo"
-              className="party-png"
-            />
-          </motion.div>
+          <FloatingIcon delay={0.2}>
+            <MateIcon />
+          </FloatingIcon>
 
-          <motion.div
-            className="party-png-wrap"
-            animate={{
-              y: [0, -8, 0],
-              rotate: [0, 1.5, 0, -1, 0],
-            }}
-            transition={{
-              duration: 5.2,
-              delay: 0.3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <img
-              src="/icons/m.png"
-              alt="Mate"
-              className="party-png"
-            />
-          </motion.div>
+          <FloatingIcon delay={0.4}>
+            <SwimsuitIcon />
+          </FloatingIcon>
 
-          <motion.div
-            className="party-png-wrap"
-            animate={{
-              y: [0, -5, 0],
-              rotate: [0, -1, 0, 1, 0],
-            }}
-            transition={{
-              duration: 5.8,
-              delay: 0.6,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <img
-              src="/icons/r.png"
-              alt="Reposera"
-              className="party-png"
-            />
-          </motion.div>
+          <FloatingIcon delay={0.6}>
+            <MusicIcon />
+          </FloatingIcon>
 
-          <motion.div
-            className="party-png-wrap"
-            animate={{
-              y: [0, -7, 0],
-              rotate: [0, 1, 0, -1.5, 0],
-            }}
-            transition={{
-              duration: 5,
-              delay: 0.9,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <img
-              src="/icons/to.png"
-              alt="Torta"
-              className="party-png"
-            />
-          </motion.div>
-
+          <FloatingIcon delay={0.8}>
+            <HeartIcon />
+          </FloatingIcon>
         </div>
       </motion.div>
 
