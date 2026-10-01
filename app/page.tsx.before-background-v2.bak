@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import InvitationBackground from "./components/InvitationBackground";
 
 type Respuesta = "si" | "duda" | "no" | null;
 
@@ -43,8 +42,7 @@ export default function Home() {
 
   return (
     <main className="experiencia">
-      <InvitationBackground screen={pantalla} />
-      
+      <BackgroundMotifs />
       <AnimatePresence mode="wait">
         <motion.section
           key={pantalla}
@@ -308,7 +306,7 @@ function PantallaRespuesta() {
         </h2>
 
         <p className="subtitulo-rsvp">
-          Queremos saber si vas a acompañarnos.
+          Queremos saber si vas a acompa\u00F1arnos.
         </p>
 
         <div className="nombre-box">
