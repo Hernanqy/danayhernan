@@ -466,45 +466,22 @@ function RsvpScreen({
   const [answer, setAnswer] =
     useState<Answer>(null);
 
-  const confirm = async () => {
+  const confirm = () => {
     if (!name.trim() || !answer) {
       return;
     }
 
-    const url =
-      "https://script.google.com/macros/s/AKfycbwP3iwqTzRleyLlpbj4ebeb2i8XdKhqYT6hkwpjR5680C3gcFb-3XHVRybyhof78CeJCA/exec";
+    localStorage.setItem(
+      "wedding-rsvp",
+      JSON.stringify({
+        name: name.trim(),
+        answer,
+        date:
+          new Date().toISOString(),
+      })
+    );
 
-    try {
-      const body = new URLSearchParams();
-
-      body.append(
-        "nombre",
-        name.trim()
-      );
-
-      body.append(
-        "respuesta",
-        answer
-      );
-
-      await fetch(
-        url,
-        {
-          method: "POST",
-          mode: "no-cors",
-          body: body,
-        }
-      );
-
-      next();
-    }
-    catch (error) {
-      console.error(error);
-
-      alert(
-        "No se pudo enviar la respuesta."
-      );
-    }
+    next();
   };
 
   return (
