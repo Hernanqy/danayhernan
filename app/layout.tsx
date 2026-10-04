@@ -37,15 +37,15 @@ export const metadata: Metadata = {
     locale:
       "es_AR",
 
-    images: [
-      {
-        url: "/preview.jpg",
-        width: 1200,
-        height: 630,
-        alt:
-          "Dana y Hernán - 4 de diciembre de 2026",
-      },
-    ],
+   images: [
+  {
+    url: "/preview.png",
+    width: 1200,
+    height: 630,
+    alt:
+      "Dana y Hernán - 4 de diciembre de 2026",
+  },
+],
   },
 };
 
