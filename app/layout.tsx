@@ -10,13 +10,7 @@ export const metadata: Metadata = {
     "Dana y Hernán | 4 de diciembre 2026",
 
   description:
-    "Guardá la fecha. Te esperamos para celebrar con nosotros.",
-
-  icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
-  },
+    "Guardá la fecha. Te esperamos para celebrar con nosotros ❤️",
 
   openGraph: {
     title:
@@ -36,20 +30,6 @@ export const metadata: Metadata = {
 
     type:
       "website",
-
-    images: [
-      {
-        url:
-          "https://danayhernan.vercel.app/preview.png",
-
-        width: 1200,
-
-        height: 630,
-
-        alt:
-          "Dana y Hernán - 4 de diciembre de 2026",
-      },
-    ],
   },
 
   twitter: {
@@ -61,10 +41,6 @@ export const metadata: Metadata = {
 
     description:
       "Guardá la fecha. Te esperamos para celebrar con nosotros ❤️",
-
-    images: [
-      "https://danayhernan.vercel.app/preview.png",
-    ],
   },
 };
 
