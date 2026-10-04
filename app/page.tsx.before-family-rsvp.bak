@@ -211,14 +211,12 @@ function CoverScreen({
 
       >
 
-        <p className="names">
-
-          {
-            "DANA & HERN\u00C1N"
-          }
-
-        </p>
-
+        
+<p className="names names-stacked-mobile">
+  <span>DANA</span>
+  <span className="names-y">Y</span>
+  <span>{"HERN\u00C1N"}</span>
+</p>
 
         <motion.div
 

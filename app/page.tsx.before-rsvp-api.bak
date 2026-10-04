@@ -26,6 +26,10 @@ const MAP_URL =
   "https://www.google.com/maps/search/?api=1&query=Calle+213+2370+Olavarria+Buenos+Aires";
 
 
+const RSVP_URL =
+  "https://script.google.com/macros/s/AKfycbwP3iwqTzRleyLlpbj4ebeb2i8XdKhqYT6hkwpjR5680C3gcFb-3XHVRybyhof78CeJCA/exec";
+
+
 export default function Home() {
 
   const [screen, setScreen] =
@@ -718,9 +722,10 @@ function RsvpScreen({
 
 
         await fetch(
-          "/api/rsvp",
+          RSVP_URL,
           {
             method: "POST",
+            mode: "no-cors",
             body,
           }
         );

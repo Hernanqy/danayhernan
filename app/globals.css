@@ -1423,6 +1423,82 @@ button {
     margin: 22px 0;
   }
 
+}.wedding-app {
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+
+  background-image:
+    linear-gradient(
+      rgba(245, 241, 232, 0.10),
+      rgba(245, 241, 232, 0.10)
+    ),
+    url("/fondo/fondo-boda.png");
+
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.wedding-screen {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+}
+
+/* Quita los dibujos viejos del fondo */
+.doodle-background {
+  display: none;
+}
+
+@media (max-width: 650px) {
+  .wedding-app {
+    background-size: cover;
+    background-position: center center;
+
+    /* mejor compatibilidad en celulares */
+    background-attachment: scroll;
+  }
+}
+
+/* NOMBRES RESPONSIVE */
+
+.names-stacked-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18em;
+}
+
+.names-stacked-mobile span {
+  display: inline-block;
+}
+
+@media (max-width: 650px) {
+
+  .names-stacked-mobile {
+    flex-direction: column;
+    gap: 2px;
+
+    line-height: 0.95;
+
+    text-align: center;
+  }
+
+  .names-stacked-mobile .names-y {
+    font-size: 0.55em;
+
+    line-height: 1;
+
+    margin: 3px 0 5px;
+
+    opacity: 0.75;
+  }
+
 }
 
 /* SCHEDULE_FIX_END */
