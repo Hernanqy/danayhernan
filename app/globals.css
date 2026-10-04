@@ -1007,3 +1007,19 @@ button {
 
 
 /* PARTY_PNG_ICONS_END */
+.rsvp-error {
+  margin: 16px 0 0;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  color: #8b3d35;
+}
+
+.send-rsvp:disabled,
+.rsvp-option:disabled {
+  cursor: default;
+}
+
+.send-rsvp:disabled {
+  opacity: 0.35;
+}
