@@ -35,12 +35,6 @@ export default function Home() {
   const [screen, setScreen] =
     useState(0);
 
-  const audioRef =
-    useRef<HTMLAudioElement>(null);
-
-  const [musicPlaying, setMusicPlaying] =
-    useState(false);
-
 
   const next = () => {
 
@@ -67,124 +61,35 @@ export default function Home() {
   };
 
 
-  const startMusic =
-    async () => {
-
-      const audio =
-        audioRef.current;
-
-      if (!audio) {
-        return;
-      }
-
-      audio.volume = 0.35;
-
-      try {
-
-        await audio.play();
-
-        setMusicPlaying(true);
-
-      }
-      catch (error) {
-
-        console.error(error);
-
-      }
-
-    };
-
-
-  const toggleMusic =
-    async () => {
-
-      const audio =
-        audioRef.current;
-
-      if (!audio) {
-        return;
-      }
-
-      if (audio.paused) {
-
-        try {
-
-          await audio.play();
-
-          setMusicPlaying(true);
-
-        }
-        catch (error) {
-
-          console.error(error);
-
-        }
-
-      }
-      else {
-
-        audio.pause();
-
-        setMusicPlaying(false);
-
-      }
-
-    };
-
-
   return (
 
     <main className="wedding-app">
 
-      <audio
-        ref={audioRef}
-        src="/audio/musica.mp3"
-        loop
-        preload="auto"
-      />
-
-
-      {screen > 0 && (
-
-        <button
-          type="button"
-          className="music-button"
-          onClick={toggleMusic}
-          aria-label={
-            musicPlaying
-              ? "Pausar musica"
-              : "Reproducir musica"
-          }
-        >
-          {
-            musicPlaying
-              ? "\u266B"
-              : "\u266A"
-          }
-        </button>
-
-      )}
-
-
       <AnimatePresence mode="wait">
 
         <motion.section
+
           key={screen}
+
           className="wedding-screen"
+
           initial={{
             opacity: 0,
-            y: 12,
+            y: 16,
           }}
+
           animate={{
             opacity: 1,
             y: 0,
           }}
+
           exit={{
             opacity: 0,
-            y: -12,
+            y: -16,
           }}
+
           transition={{
-            duration: 0.5,
+            duration: 0.55,
             ease: [
               0.22,
               1,
@@ -192,6 +97,7 @@ export default function Home() {
               1,
             ],
           }}
+
         >
 
           <DoodleBackground
@@ -200,55 +106,42 @@ export default function Home() {
 
 
           {screen === 0 && (
-
             <CoverScreen
               next={next}
-              startMusic={startMusic}
             />
-
           )}
 
 
           {screen === 1 && (
-
             <AnnouncementScreen
               next={next}
             />
-
           )}
 
 
           {screen === 2 && (
-
             <DateScreen
               next={next}
             />
-
           )}
 
 
           {screen === 3 && (
-
             <CelebrationScreen
               next={next}
             />
-
           )}
 
 
           {screen === 4 && (
-
             <RsvpScreen
               next={next}
             />
-
           )}
 
 
           {screen === 5 && (
-
             <FinalScreen />
-
           )}
 
 
@@ -256,12 +149,19 @@ export default function Home() {
             screen < 5 && (
 
             <button
+
               type="button"
+
               className="back-button"
+
               onClick={previous}
+
               aria-label="Volver"
+
             >
+
               {"<"}
+
             </button>
 
           )}
@@ -278,100 +178,99 @@ export default function Home() {
 
 
 /* =========================================================
-   PORTADA
+   SCREEN 1
    ========================================================= */
 
 function CoverScreen({
   next,
-  startMusic,
 }: {
   next: () => void;
-  startMusic: () => Promise<void>;
 }) {
-
-  const enter =
-    async () => {
-
-      await startMusic();
-
-      next();
-
-    };
-
 
   return (
 
     <div className="screen-content cover-screen">
 
       <motion.div
+
         className="cover-center"
+
         initial={{
           opacity: 0,
           scale: 0.95,
         }}
+
         animate={{
           opacity: 1,
           scale: 1,
         }}
+
         transition={{
           duration: 0.9,
         }}
+
       >
 
         <p className="names">
+
           {
-            "DANA Y HERN\u00C1N"
+            "DANA & HERN\u00C1N"
           }
+
         </p>
 
 
         <motion.div
+
           className="hand-line"
+
           initial={{
             scaleX: 0,
           }}
+
           animate={{
             scaleX: 1,
           }}
+
           transition={{
             duration: 1,
             delay: 0.3,
           }}
+
         />
 
       </motion.div>
 
 
-      <div className="enter-button-wrap">
+      <motion.button
 
-        <motion.button
-          type="button"
-          className="enter-button"
-          onClick={enter}
-          animate={{
-            scale: [
-              1,
-              1.055,
-              1,
-            ],
-          }}
-          transition={{
-            duration: 1.6,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          whileTap={{
-            scale: 0.96,
-          }}
-        >
+        type="button"
 
-          {
-            "Toc\u00E1 para entrar \u2192"
-          }
+        className="enter-button"
 
-        </motion.button>
+        onClick={next}
 
-      </div>
+        animate={{
+          y: [
+            0,
+            4,
+            0,
+          ],
+        }}
+
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+
+      >
+
+        {
+          "Toc\u00E1 para entrar \u2192"
+        }
+
+      </motion.button>
 
     </div>
 
@@ -381,7 +280,7 @@ function CoverScreen({
 
 
 /* =========================================================
-   MENSAJE
+   SCREEN 2
    ========================================================= */
 
 function AnnouncementScreen({
@@ -395,18 +294,25 @@ function AnnouncementScreen({
     <div className="screen-content announcement-screen">
 
       <motion.div
+
         className="announcement-card"
+
         initial={{
           opacity: 0,
+          rotate: -1,
           scale: 0.96,
         }}
+
         animate={{
           opacity: 1,
+          rotate: 0,
           scale: 1,
         }}
+
         transition={{
           duration: 0.8,
         }}
+
       >
 
         <h1>
@@ -439,7 +345,7 @@ function AnnouncementScreen({
 
 
 /* =========================================================
-   FECHA
+   SCREEN 3
    ========================================================= */
 
 function DateScreen({
@@ -453,18 +359,23 @@ function DateScreen({
     <div className="screen-content date-screen">
 
       <motion.div
+
         className="big-date"
+
         initial={{
           opacity: 0,
           scale: 0.9,
         }}
+
         animate={{
           opacity: 1,
           scale: 1,
         }}
+
         transition={{
           duration: 0.8,
         }}
+
       >
 
         <span>
@@ -496,7 +407,7 @@ function DateScreen({
 
 
 /* =========================================================
-   CIVIL Y FIESTA
+   SCREEN 4
    ========================================================= */
 
 function CelebrationScreen({
@@ -510,68 +421,76 @@ function CelebrationScreen({
     <div className="screen-content celebration-screen">
 
       <motion.div
-        className="schedule-card"
+
+        className="schedule"
+
         initial={{
           opacity: 0,
-          y: 18,
+          y: 20,
         }}
+
         animate={{
           opacity: 1,
           y: 0,
         }}
-        transition={{
-          duration: 0.7,
-        }}
+
       >
 
-        <div className="timeline-item">
+        <div className="schedule-block">
 
-          <div className="timeline-time">
+          <span className="schedule-time">
+
             13hs
-          </div>
 
-          <div className="timeline-info">
-<div className="timeline-title">
-  {"Civil (Belgrano 2867)"}
-</div>
-            
+          </span>
 
-          </div>
+
+          <span className="schedule-label">
+
+            Civil
+
+          </span>
 
         </div>
 
 
-        <div className="timeline-separator" />
+        <div className="schedule-divider" />
 
 
-        <div className="timeline-item">
+        <div className="schedule-block">
 
-          <div className="timeline-time">
+          <span className="schedule-time">
+
             16hs
-          </div>
 
-          <div className="timeline-info">
+          </span>
 
-            <div className="timeline-title">
 
-              A partir de las 16hs
-              celebramos en la quinta
+          <span className="schedule-label">
 
-            </div>
+            {
+              "A partir de las 16hs celebramos en la quinta"
+            }
 
-          </div>
+          </span>
 
         </div>
 
 
         <a
+
           className="map-button"
+
           href={MAP_URL}
+
           target="_blank"
+
           rel="noreferrer"
+
         >
 
           <PinIcon />
+
 
           <span>
 
@@ -580,6 +499,7 @@ function CelebrationScreen({
             }
 
           </span>
+
 
           <b>
             {"\u2192"}
@@ -590,29 +510,34 @@ function CelebrationScreen({
 
         <div className="party-icons">
 
+
           <FloatingImage
             src="/icons/t.png"
             alt="Termo"
             delay={0}
           />
 
+
           <FloatingImage
             src="/icons/m.png"
             alt="Mate"
-            delay={0.2}
+            delay={0.25}
           />
+
 
           <FloatingImage
             src="/icons/r.png"
             alt="Reposera"
-            delay={0.4}
+            delay={0.5}
           />
+
 
           <FloatingImage
             src="/icons/to.png"
             alt="Torta"
-            delay={0.6}
+            delay={0.75}
           />
+
 
         </div>
 
@@ -629,7 +554,7 @@ function CelebrationScreen({
 
 
 /* =========================================================
-   CONFIRMACION
+   SCREEN 5 RSVP
    ========================================================= */
 
 function RsvpScreen({
@@ -641,44 +566,40 @@ function RsvpScreen({
   const [open, setOpen] =
     useState(false);
 
+
   const [name, setName] =
     useState("");
+
 
   const [answer, setAnswer] =
     useState<Answer>(null);
 
-  const [companions, setCompanions] =
-    useState(0);
 
   const [sending, setSending] =
     useState(false);
 
+
   const [error, setError] =
     useState("");
+
+
+  /*
+    IMPORTANT:
+    This ref blocks a second click immediately.
+    State alone can take one render to update.
+  */
 
   const sendingRef =
     useRef(false);
 
 
-  const chooseAnswer = (
-    value: NonNullable<Answer>
-  ) => {
-
-    if (sendingRef.current) {
-      return;
-    }
-
-    setAnswer(value);
-
-    if (value !== "yes") {
-      setCompanions(0);
-    }
-
-  };
-
-
   const confirm =
     async () => {
+
+      /*
+        If the first click already started,
+        ignore every following click.
+      */
 
       if (
         !name.trim() ||
@@ -688,6 +609,11 @@ function RsvpScreen({
         return;
       }
 
+
+      /*
+        Lock synchronously before doing
+        any async operation.
+      */
 
       sendingRef.current = true;
 
@@ -714,34 +640,44 @@ function RsvpScreen({
         );
 
 
-        body.append(
-          "acompanantes",
-          answer === "yes"
-            ? String(companions)
-            : "0"
-        );
-
-
         await fetch(
+
           RSVP_URL,
+
           {
             method: "POST",
+
             mode: "no-cors",
+
             body,
           }
+
         );
 
+
+        /*
+          Only after the request was sent,
+          go to final screen.
+        */
 
         next();
 
       }
+
       catch (err) {
 
         console.error(err);
 
+
+        /*
+          Unlock only if there was
+          an actual transmission error.
+        */
+
         sendingRef.current = false;
 
         setSending(false);
+
 
         setError(
           "No se pudo enviar la respuesta. Intenta nuevamente."
@@ -757,15 +693,19 @@ function RsvpScreen({
     <div className="screen-content rsvp-screen">
 
       <motion.div
+
         className="rsvp-content"
+
         initial={{
           opacity: 0,
           scale: 0.96,
         }}
+
         animate={{
           opacity: 1,
           scale: 1,
         }}
+
       >
 
         <h1>
@@ -780,14 +720,19 @@ function RsvpScreen({
         {!open && (
 
           <motion.button
+
             type="button"
+
             className="main-rsvp-button"
+
             onClick={() =>
               setOpen(true)
             }
+
             whileTap={{
               scale: 0.97,
             }}
+
           >
 
             {
@@ -804,35 +749,48 @@ function RsvpScreen({
           {open && (
 
             <motion.div
+
               className="rsvp-form"
+
               initial={{
                 opacity: 0,
-                y: 16,
+                y: 20,
               }}
+
               animate={{
                 opacity: 1,
                 y: 0,
               }}
+
               exit={{
                 opacity: 0,
               }}
+
             >
 
-              <label className="name-label">
+              <label>
 
                 Tu nombre
 
+
                 <input
+
                   type="text"
+
                   placeholder="Nombre y apellido"
+
                   value={name}
+
                   disabled={sending}
+
                   onChange={(event) =>
                     setName(
                       event.target.value
                     )
                   }
+
                   autoComplete="name"
+
                 />
 
               </label>
@@ -840,14 +798,21 @@ function RsvpScreen({
 
               <div className="rsvp-options">
 
+
                 <RsvpOption
+
                   active={
                     answer === "yes"
                   }
-                  disabled={sending}
-                  onClick={() =>
-                    chooseAnswer("yes")
+
+                  disabled={
+                    sending
                   }
+
+                  onClick={() =>
+                    setAnswer("yes")
+                  }
+
                 >
 
                   {
@@ -858,13 +823,21 @@ function RsvpScreen({
 
 
                 <RsvpOption
+
                   active={
                     answer === "maybe"
                   }
-                  disabled={sending}
-                  onClick={() =>
-                    chooseAnswer("maybe")
+
+                  disabled={
+                    sending
                   }
+
+                  onClick={() =>
+                    setAnswer(
+                      "maybe"
+                    )
+                  }
+
                 >
 
                   {
@@ -875,157 +848,54 @@ function RsvpScreen({
 
 
                 <RsvpOption
+
                   active={
                     answer === "no"
                   }
-                  disabled={sending}
-                  onClick={() =>
-                    chooseAnswer("no")
+
+                  disabled={
+                    sending
                   }
+
+                  onClick={() =>
+                    setAnswer("no")
+                  }
+
                 >
 
                   NO VOY A PODER
 
                 </RsvpOption>
 
+
               </div>
-
-
-              <AnimatePresence>
-
-                {answer === "yes" && (
-
-                  <motion.div
-                    className="companions-card"
-                    initial={{
-                      opacity: 0,
-                      y: 14,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 10,
-                    }}
-                    transition={{
-                      duration: 0.35,
-                    }}
-                  >
-
-                    <p className="companions-title">
-
-                      {
-                        "\u00BFCon cu\u00E1ntas personas m\u00E1s ven\u00EDs?"
-                      }
-
-                    </p>
-
-
-                    <p className="companions-help">
-
-                      {
-                        "No te cuentes a vos. Sum\u00E1 pareja, familia o acompa\u00F1antes."
-                      }
-
-                    </p>
-
-
-                    <div className="companions-stepper">
-
-                      <button
-                        type="button"
-                        disabled={
-                          sending ||
-                          companions <= 0
-                        }
-                        onClick={() =>
-                          setCompanions(
-                            (value) =>
-                              Math.max(
-                                0,
-                                value - 1
-                              )
-                          )
-                        }
-                      >
-                        -
-                      </button>
-
-
-                      <motion.strong
-                        key={companions}
-                        initial={{
-                          opacity: 0.4,
-                          scale: 0.8,
-                        }}
-                        animate={{
-                          opacity: 1,
-                          scale: 1,
-                        }}
-                      >
-                        {companions}
-                      </motion.strong>
-
-
-                      <button
-                        type="button"
-                        disabled={
-                          sending ||
-                          companions >= 10
-                        }
-                        onClick={() =>
-                          setCompanions(
-                            (value) =>
-                              Math.min(
-                                10,
-                                value + 1
-                              )
-                          )
-                        }
-                      >
-                        +
-                      </button>
-
-                    </div>
-
-
-                    <p className="companions-total">
-
-                      {
-                        companions === 0
-                          ? "Ven\u00EDs vos."
-                          : `En total ser\u00EDan ${companions + 1} personas.`
-                      }
-
-                    </p>
-
-                  </motion.div>
-
-                )}
-
-              </AnimatePresence>
 
 
               {error && (
 
                 <p className="rsvp-error">
+
                   {error}
+
                 </p>
 
               )}
 
 
               <button
+
                 type="button"
+
                 className="send-rsvp"
+
                 disabled={
                   !name.trim() ||
                   !answer ||
                   sending
                 }
+
                 onClick={confirm}
+
               >
 
                 {
@@ -1062,43 +932,52 @@ function FinalScreen() {
     <div className="screen-content final-screen">
 
       <motion.div
+
         className="final-content"
+
         initial={{
           opacity: 0,
-          scale: 0.93,
+          scale: 0.92,
         }}
+
         animate={{
           opacity: 1,
           scale: 1,
         }}
+
         transition={{
           duration: 0.9,
         }}
+
       >
 
         <p className="names">
 
           {
-            "DANA Y HERN\u00C1N"
+            "DANA & HERN\u00C1N"
           }
 
         </p>
 
 
         <motion.div
+
           className="final-heart"
+
           animate={{
             scale: [
               1,
-              1.1,
+              1.08,
               1,
             ],
           }}
+
           transition={{
-            duration: 1.8,
+            duration: 2,
             repeat: Infinity,
             ease: "easeInOut",
           }}
+
         >
 
           {
@@ -1126,7 +1005,7 @@ function FinalScreen() {
 
 
 /* =========================================================
-   CONTINUAR
+   NEXT BUTTON
    ========================================================= */
 
 function NextButton({
@@ -1137,36 +1016,35 @@ function NextButton({
 
   return (
 
-    <div className="next-button-wrap">
+    <motion.button
 
-      <motion.button
-        type="button"
-        className="next-button"
-        onClick={next}
-        animate={{
-          scale: [
-            1,
-            1.045,
-            1,
-          ],
-        }}
-        transition={{
-          duration: 1.8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        whileTap={{
-          scale: 0.96,
-        }}
-      >
+      type="button"
 
-        {
-          "CONTINUAR \u2192"
-        }
+      className="next-button"
 
-      </motion.button>
+      onClick={next}
 
-    </div>
+      animate={{
+        x: [
+          0,
+          4,
+          0,
+        ],
+      }}
+
+      transition={{
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+
+    >
+
+      {
+        "\u2192"
+      }
+
+    </motion.button>
 
   );
 
@@ -1174,7 +1052,7 @@ function NextButton({
 
 
 /* =========================================================
-   OPCION RSVP
+   RSVP OPTION
    ========================================================= */
 
 function RsvpOption({
@@ -1192,14 +1070,19 @@ function RsvpOption({
   return (
 
     <motion.button
+
       type="button"
+
       disabled={disabled}
+
       className={
         active
           ? "rsvp-option active"
           : "rsvp-option"
       }
+
       onClick={onClick}
+
       whileTap={
         disabled
           ? undefined
@@ -1207,13 +1090,14 @@ function RsvpOption({
               scale: 0.97,
             }
       }
+
     >
 
       <span className="option-circle">
 
         {
           active
-            ? "\u2713"
+            ? "OK"
             : ""
         }
 
@@ -1221,7 +1105,9 @@ function RsvpOption({
 
 
       <span>
+
         {children}
+
       </span>
 
     </motion.button>
@@ -1232,7 +1118,7 @@ function RsvpOption({
 
 
 /* =========================================================
-   PNG
+   FLOATING PNG ICONS
    ========================================================= */
 
 function FloatingImage({
@@ -1248,33 +1134,42 @@ function FloatingImage({
   return (
 
     <motion.div
+
       className="party-png-wrap"
+
       animate={{
         y: [
           0,
           -6,
           0,
         ],
+
         rotate: [
           0,
-          1.2,
+          1.5,
           0,
-          -1.2,
+          -1,
           0,
         ],
       }}
+
       transition={{
         duration: 5,
         delay,
         repeat: Infinity,
         ease: "easeInOut",
       }}
+
     >
 
       <img
+
         src={src}
+
         alt={alt}
+
         className="party-png"
+
       />
 
     </motion.div>
@@ -1285,7 +1180,7 @@ function FloatingImage({
 
 
 /* =========================================================
-   FONDO
+   BACKGROUND
    ========================================================= */
 
 function DoodleBackground({
@@ -1297,52 +1192,68 @@ function DoodleBackground({
   return (
 
     <div
+
       className={
         `doodle-background doodle-screen-${screen}`
       }
+
       aria-hidden="true"
+
     >
 
       <motion.div
+
         className="doodle doodle-one"
+
         animate={{
           y: [
             0,
-            -8,
+            -10,
             0,
           ],
+
           rotate: [
-            -6,
-            -2,
-            -6,
+            -7,
+            -3,
+            -7,
           ],
         }}
+
         transition={{
           duration: 10,
           repeat: Infinity,
           ease: "easeInOut",
         }}
+
       >
+
         <HeartIcon />
+
       </motion.div>
 
 
       <motion.div
+
         className="doodle doodle-two"
+
         animate={{
           y: [
             0,
-            7,
+            8,
             0,
           ],
         }}
+
         transition={{
           duration: 13,
           repeat: Infinity,
           ease: "easeInOut",
         }}
+
       >
+
         <MusicIcon />
+
       </motion.div>
 
 
@@ -1350,63 +1261,73 @@ function DoodleBackground({
 
         {
           Array.from({
-            length: 10,
+            length: 12,
           }).map(
             (_, index) => (
 
               <motion.i
+
                 key={index}
+
                 style={{
                   left:
                     `${
-                      8 +
+                      7 +
                       (
                         (
                           index *
-                          19
+                          17
                         ) %
-                        84
+                        86
                       )
                     }%`,
+
                   top:
                     `${
-                      10 +
+                      9 +
                       (
                         (
                           index *
-                          21
+                          23
                         ) %
-                        78
+                        82
                       )
                     }%`,
                 }}
+
                 animate={{
                   y: [
                     0,
-                    -7,
+                    -8,
                     0,
                   ],
+
                   opacity: [
-                    0.05,
-                    0.14,
-                    0.05,
+                    0.08,
+                    0.22,
+                    0.08,
                   ],
                 }}
+
                 transition={{
                   duration:
                     6 +
                     (
                       index %
-                      4
+                      5
                     ),
+
                   delay:
                     index *
-                    0.2,
+                    0.17,
+
                   repeat:
                     Infinity,
+
                   ease:
                     "easeInOut",
                 }}
+
               />
 
             )
@@ -1423,7 +1344,7 @@ function DoodleBackground({
 
 
 /* =========================================================
-   ICONOS
+   ICONS
    ========================================================= */
 
 function HeartIcon() {
