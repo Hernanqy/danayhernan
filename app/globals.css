@@ -1502,3 +1502,91 @@ button {
 }
 
 /* SCHEDULE_FIX_END */
+
+
+/* FRIENDS_VERSION_START */
+
+.friends-meeting {
+  width: 100%;
+  max-width: 620px;
+
+  margin:
+    0 auto 20px;
+
+  text-align: center;
+}
+
+
+.friends-hours {
+  font-family:
+    "Segoe Print",
+    "Bradley Hand",
+    cursive;
+
+  font-size:
+    clamp(
+      62px,
+      10vw,
+      90px
+    );
+
+  line-height: 1;
+
+  color: #211f1a;
+}
+
+
+.friends-meeting-line {
+  width: 80px;
+  height: 1px;
+
+  margin:
+    25px auto;
+
+  background:
+    rgba(
+      33,
+      31,
+      26,
+      0.25
+    );
+}
+
+
+.friends-meeting-text {
+  max-width: 520px;
+
+  margin: 0 auto;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      22px,
+      4vw,
+      30px
+    );
+
+  line-height: 1.35;
+}
+
+
+@media (max-width: 650px) {
+
+  .friends-hours {
+    font-size: 62px;
+  }
+
+
+  .friends-meeting-text {
+    max-width: 300px;
+
+    font-size: 20px;
+  }
+
+}
+
+/* FRIENDS_VERSION_END */

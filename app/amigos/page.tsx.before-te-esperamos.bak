@@ -1,0 +1,1390 @@
+"use client";
+
+import {
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+
+import {
+  AnimatePresence,
+  motion,
+} from "framer-motion";
+
+
+type Answer =
+  | "yes"
+  | "maybe"
+  | "no"
+  | null;
+
+
+const TOTAL_SCREENS = 6;
+
+
+const MAP_URL =
+  "https://www.google.com/maps/search/?api=1&query=Calle+213+2370+Olavarria+Buenos+Aires";
+
+
+export default function Home() {
+
+  const [screen, setScreen] =
+    useState(0);
+
+  const audioRef =
+    useRef<HTMLAudioElement>(null);
+
+  const [musicPlaying, setMusicPlaying] =
+    useState(false);
+
+
+  const next = () => {
+
+    setScreen(
+      (current) =>
+        current <
+        TOTAL_SCREENS - 1
+          ? current + 1
+          : current
+    );
+
+  };
+
+
+  const previous = () => {
+
+    setScreen(
+      (current) =>
+        current > 0
+          ? current - 1
+          : current
+    );
+
+  };
+
+
+  const startMusic =
+    async () => {
+
+      const audio =
+        audioRef.current;
+
+      if (!audio) {
+        return;
+      }
+
+      audio.volume = 0.35;
+
+      try {
+
+        await audio.play();
+
+        setMusicPlaying(true);
+
+      }
+      catch (error) {
+
+        console.error(error);
+
+      }
+
+    };
+
+
+  const toggleMusic =
+    async () => {
+
+      const audio =
+        audioRef.current;
+
+      if (!audio) {
+        return;
+      }
+
+      if (audio.paused) {
+
+        try {
+
+          await audio.play();
+
+          setMusicPlaying(true);
+
+        }
+        catch (error) {
+
+          console.error(error);
+
+        }
+
+      }
+      else {
+
+        audio.pause();
+
+        setMusicPlaying(false);
+
+      }
+
+    };
+
+
+  return (
+
+    <main className="wedding-app">
+
+      <audio
+        ref={audioRef}
+        src="/audio/musica.mp3"
+        loop
+        preload="auto"
+      />
+
+
+      {screen > 0 && (
+
+        <button
+          type="button"
+          className="music-button"
+          onClick={toggleMusic}
+          aria-label={
+            musicPlaying
+              ? "Pausar musica"
+              : "Reproducir musica"
+          }
+        >
+          {
+            musicPlaying
+              ? "\u266B"
+              : "\u266A"
+          }
+        </button>
+
+      )}
+
+
+      <AnimatePresence mode="wait">
+
+        <motion.section
+          key={screen}
+          className="wedding-screen"
+          initial={{
+            opacity: 0,
+            y: 12,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          exit={{
+            opacity: 0,
+            y: -12,
+          }}
+          transition={{
+            duration: 0.5,
+            ease: [
+              0.22,
+              1,
+              0.36,
+              1,
+            ],
+          }}
+        >
+
+          <DoodleBackground
+            screen={screen}
+          />
+
+
+          {screen === 0 && (
+
+            <CoverScreen
+              next={next}
+              startMusic={startMusic}
+            />
+
+          )}
+
+
+          {screen === 1 && (
+
+            <AnnouncementScreen
+              next={next}
+            />
+
+          )}
+
+
+          {screen === 2 && (
+
+            <DateScreen
+              next={next}
+            />
+
+          )}
+
+
+          {screen === 3 && (
+
+            <CelebrationScreen
+              next={next}
+            />
+
+          )}
+
+
+          {screen === 4 && (
+
+            <RsvpScreen
+              next={next}
+            />
+
+          )}
+
+
+          {screen === 5 && (
+
+            <FinalScreen />
+
+          )}
+
+
+          {screen > 0 &&
+            screen < 5 && (
+
+            <button
+              type="button"
+              className="back-button"
+              onClick={previous}
+              aria-label="Volver"
+            >
+              {"<"}
+            </button>
+
+          )}
+
+        </motion.section>
+
+      </AnimatePresence>
+
+    </main>
+
+  );
+
+}
+
+
+/* =========================================================
+   PORTADA
+   ========================================================= */
+
+function CoverScreen({
+  next,
+  startMusic,
+}: {
+  next: () => void;
+  startMusic: () => Promise<void>;
+}) {
+
+  const enter =
+    async () => {
+
+      await startMusic();
+
+      next();
+
+    };
+
+
+  return (
+
+    <div className="screen-content cover-screen">
+
+      <motion.div
+        className="cover-center"
+        initial={{
+          opacity: 0,
+          scale: 0.95,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        transition={{
+          duration: 0.9,
+        }}
+      >
+
+        
+<p className="names names-stacked-mobile">
+  <span>DANA</span>
+  <span className="names-y">Y</span>
+  <span>{"HERN\u00C1N"}</span>
+</p>
+
+        <motion.div
+          className="hand-line"
+          initial={{
+            scaleX: 0,
+          }}
+          animate={{
+            scaleX: 1,
+          }}
+          transition={{
+            duration: 1,
+            delay: 0.3,
+          }}
+        />
+
+      </motion.div>
+
+
+      <div className="enter-button-wrap">
+
+        <motion.button
+          type="button"
+          className="enter-button"
+          onClick={enter}
+          animate={{
+            scale: [
+              1,
+              1.055,
+              1,
+            ],
+          }}
+          transition={{
+            duration: 1.6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          whileTap={{
+            scale: 0.96,
+          }}
+        >
+
+          {
+            "Toc\u00E1 para entrar \u2192"
+          }
+
+        </motion.button>
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+
+/* =========================================================
+   MENSAJE
+   ========================================================= */
+
+function AnnouncementScreen({
+  next,
+}: {
+  next: () => void;
+}) {
+
+  return (
+
+    <div className="screen-content announcement-screen">
+
+      <motion.div
+        className="announcement-card"
+        initial={{
+          opacity: 0,
+          scale: 0.96,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        transition={{
+          duration: 0.8,
+        }}
+      >
+
+        <h1>
+
+          {
+            "\u00A1Nos casamos! \u2764\uFE0F"
+          }
+
+        </h1>
+
+
+        <p>
+
+          {
+            "Gu\u00E1rdate esta fechita y te esperamos para celebrar con nosotros"
+          }
+
+        </p>
+
+      </motion.div>
+
+
+      <NextButton next={next} />
+
+    </div>
+
+  );
+
+}
+
+
+/* =========================================================
+   FECHA
+   ========================================================= */
+
+function DateScreen({
+  next,
+}: {
+  next: () => void;
+}) {
+
+  return (
+
+    <div className="screen-content date-screen">
+
+      <motion.div
+        className="big-date"
+        initial={{
+          opacity: 0,
+          scale: 0.9,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        transition={{
+          duration: 0.8,
+        }}
+      >
+
+        <span>
+          04
+        </span>
+
+        <i />
+
+        <span>
+          12
+        </span>
+
+        <i />
+
+        <span>
+          2026
+        </span>
+
+      </motion.div>
+
+
+      <NextButton next={next} />
+
+    </div>
+
+  );
+
+}
+
+
+/* =========================================================
+   CIVIL Y FIESTA
+   ========================================================= */
+
+function CelebrationScreen({
+  next,
+}: {
+  next: () => void;
+}) {
+
+  return (
+
+    <div className="screen-content celebration-screen">
+
+      <motion.div
+        className="schedule-card"
+        initial={{
+          opacity: 0,
+          y: 18,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          duration: 0.7,
+        }}
+      >
+
+        <div className="timeline-item">
+
+          <div className="timeline-time">
+            13hs
+          </div>
+
+          <div className="timeline-info">
+
+            <div className="timeline-title">
+              Civil (Belgrano 2867)
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div className="timeline-separator" />
+
+
+        <div className="friends-meeting">
+
+          <motion.div
+            className="friends-hours"
+            initial={{
+              opacity: 0,
+              scale: 0.92,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+            }}
+            transition={{
+              duration: 0.7,
+            }}
+          >
+
+            16 a 20hs
+
+          </motion.div>
+
+
+          <div className="friends-meeting-line" />
+
+
+          <p className="friends-meeting-text">
+
+            Nos encontramos de 16 hs a 20 hs
+
+          </p>
+
+        </div>
+
+
+        <a
+          className="map-button"
+          href={MAP_URL}
+          target="_blank"
+          rel="noreferrer"
+        >
+
+          <PinIcon />
+
+          <span>
+
+            {
+              "Calle 213 2370 \u00B7 Abrir ubicaci\u00F3n"
+            }
+
+          </span>
+
+          <b>
+            {"\u2192"}
+          </b>
+
+        </a>
+
+
+        <div className="party-icons">
+
+          <FloatingImage
+            src="/icons/t.png"
+            alt="Termo"
+            delay={0}
+          />
+
+          <FloatingImage
+            src="/icons/m.png"
+            alt="Mate"
+            delay={0.2}
+          />
+
+          <FloatingImage
+            src="/icons/r.png"
+            alt="Reposera"
+            delay={0.4}
+          />
+
+          <FloatingImage
+            src="/icons/to.png"
+            alt="Torta"
+            delay={0.6}
+          />
+
+        </div>
+
+      </motion.div>
+
+
+      <NextButton next={next} />
+
+    </div>
+
+  );
+
+}
+
+function RsvpScreen({
+  next,
+}: {
+  next: () => void;
+}) {
+
+  const [open, setOpen] =
+    useState(false);
+
+
+  const [name, setName] =
+    useState("");
+
+
+  const [answer, setAnswer] =
+    useState<Answer>(null);
+
+
+  const [sending, setSending] =
+    useState(false);
+
+
+  const [error, setError] =
+    useState("");
+
+
+  const sendingRef =
+    useRef(false);
+
+
+  const chooseAnswer = (
+    value: NonNullable<Answer>
+  ) => {
+
+    if (sendingRef.current) {
+      return;
+    }
+
+    setAnswer(value);
+
+  };
+
+
+  const confirm =
+    async () => {
+
+      if (
+        !name.trim() ||
+        !answer ||
+        sendingRef.current
+      ) {
+        return;
+      }
+
+
+      sendingRef.current = true;
+
+      setSending(true);
+
+      setError("");
+
+
+      try {
+
+        const body =
+          new URLSearchParams();
+
+
+        body.append(
+          "nombre",
+          name.trim()
+        );
+
+
+        body.append(
+          "respuesta",
+          answer
+        );
+
+
+        body.append(
+          "acompanantes",
+          "0"
+        );
+
+
+        await fetch(
+          "/api/rsvp",
+          {
+            method: "POST",
+            body,
+          }
+        );
+
+
+        next();
+
+      }
+      catch (err) {
+
+        console.error(err);
+
+        sendingRef.current = false;
+
+        setSending(false);
+
+        setError(
+          "No se pudo enviar la respuesta. Intenta nuevamente."
+        );
+
+      }
+
+    };
+
+
+  return (
+
+    <div className="screen-content rsvp-screen">
+
+      <motion.div
+        className="rsvp-content"
+        initial={{
+          opacity: 0,
+          scale: 0.96,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+      >
+
+        <h1>
+
+          {
+            "\u00BFVEN\u00CDS?"
+          }
+
+        </h1>
+
+
+        {!open && (
+
+          <motion.button
+            type="button"
+            className="main-rsvp-button"
+            onClick={() =>
+              setOpen(true)
+            }
+            whileTap={{
+              scale: 0.97,
+            }}
+          >
+
+            {
+              "CONFIRMAR ASISTENCIA \u2192"
+            }
+
+          </motion.button>
+
+        )}
+
+
+        <AnimatePresence>
+
+          {open && (
+
+            <motion.div
+              className="rsvp-form"
+              initial={{
+                opacity: 0,
+                y: 16,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+            >
+
+              <label className="name-label">
+
+                Tu nombre
+
+                <input
+                  type="text"
+                  placeholder="Nombre y apellido"
+                  value={name}
+                  disabled={sending}
+                  onChange={(event) =>
+                    setName(
+                      event.target.value
+                    )
+                  }
+                  autoComplete="name"
+                />
+
+              </label>
+
+
+              <div className="rsvp-options">
+
+                <RsvpOption
+                  active={
+                    answer === "yes"
+                  }
+                  disabled={sending}
+                  onClick={() =>
+                    chooseAnswer("yes")
+                  }
+                >
+
+                  {
+                    "S\u00CD, VOY"
+                  }
+
+                </RsvpOption>
+
+
+                <RsvpOption
+                  active={
+                    answer === "maybe"
+                  }
+                  disabled={sending}
+                  onClick={() =>
+                    chooseAnswer("maybe")
+                  }
+                >
+
+                  {
+                    "TODAV\u00CDA NO S\u00C9"
+                  }
+
+                </RsvpOption>
+
+
+                <RsvpOption
+                  active={
+                    answer === "no"
+                  }
+                  disabled={sending}
+                  onClick={() =>
+                    chooseAnswer("no")
+                  }
+                >
+
+                  NO VOY A PODER
+
+                </RsvpOption>
+
+              </div>
+
+
+              {error && (
+
+                <p className="rsvp-error">
+
+                  {error}
+
+                </p>
+
+              )}
+
+
+              <button
+                type="button"
+                className="send-rsvp"
+                disabled={
+                  !name.trim() ||
+                  !answer ||
+                  sending
+                }
+                onClick={confirm}
+              >
+
+                {
+                  sending
+                    ? "ENVIANDO..."
+                    : "CONFIRMAR \u2192"
+                }
+
+              </button>
+
+            </motion.div>
+
+          )}
+
+        </AnimatePresence>
+
+      </motion.div>
+
+    </div>
+
+  );
+
+}
+
+function FinalScreen() {
+
+  return (
+
+    <div className="screen-content final-screen">
+
+      <motion.div
+        className="final-content"
+        initial={{
+          opacity: 0,
+          scale: 0.93,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        transition={{
+          duration: 0.9,
+        }}
+      >
+
+        <p className="names">
+
+          {
+            "DANA Y HERN\u00C1N"
+          }
+
+        </p>
+
+
+        <motion.div
+          className="final-heart"
+          animate={{
+            scale: [
+              1,
+              1.1,
+              1,
+            ],
+          }}
+          transition={{
+            duration: 1.8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+
+          {
+            "\u2764\uFE0F"
+          }
+
+        </motion.div>
+
+
+        <p className="final-message">
+
+          {
+            "Nos vemos el 4 de diciembre \u2764\uFE0F"
+          }
+
+        </p>
+
+      </motion.div>
+
+    </div>
+
+  );
+
+}
+
+
+/* =========================================================
+   CONTINUAR
+   ========================================================= */
+
+function NextButton({
+  next,
+}: {
+  next: () => void;
+}) {
+
+  return (
+
+    <div className="next-button-wrap">
+
+      <motion.button
+        type="button"
+        className="next-button"
+        onClick={next}
+        animate={{
+          scale: [
+            1,
+            1.045,
+            1,
+          ],
+        }}
+        transition={{
+          duration: 1.8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        whileTap={{
+          scale: 0.96,
+        }}
+      >
+
+        {
+          "CONTINUAR \u2192"
+        }
+
+      </motion.button>
+
+    </div>
+
+  );
+
+}
+
+
+/* =========================================================
+   OPCION RSVP
+   ========================================================= */
+
+function RsvpOption({
+  active,
+  disabled,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+
+  return (
+
+    <motion.button
+      type="button"
+      disabled={disabled}
+      className={
+        active
+          ? "rsvp-option active"
+          : "rsvp-option"
+      }
+      onClick={onClick}
+      whileTap={
+        disabled
+          ? undefined
+          : {
+              scale: 0.97,
+            }
+      }
+    >
+
+      <span className="option-circle">
+
+        {
+          active
+            ? "\u2713"
+            : ""
+        }
+
+      </span>
+
+
+      <span>
+        {children}
+      </span>
+
+    </motion.button>
+
+  );
+
+}
+
+
+/* =========================================================
+   PNG
+   ========================================================= */
+
+function FloatingImage({
+  src,
+  alt,
+  delay,
+}: {
+  src: string;
+  alt: string;
+  delay: number;
+}) {
+
+  return (
+
+    <motion.div
+      className="party-png-wrap"
+      animate={{
+        y: [
+          0,
+          -6,
+          0,
+        ],
+        rotate: [
+          0,
+          1.2,
+          0,
+          -1.2,
+          0,
+        ],
+      }}
+      transition={{
+        duration: 5,
+        delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    >
+
+      <img
+        src={src}
+        alt={alt}
+        className="party-png"
+      />
+
+    </motion.div>
+
+  );
+
+}
+
+
+/* =========================================================
+   FONDO
+   ========================================================= */
+
+function DoodleBackground({
+  screen,
+}: {
+  screen: number;
+}) {
+
+  return (
+
+    <div
+      className={
+        `doodle-background doodle-screen-${screen}`
+      }
+      aria-hidden="true"
+    >
+
+      <motion.div
+        className="doodle doodle-one"
+        animate={{
+          y: [
+            0,
+            -8,
+            0,
+          ],
+          rotate: [
+            -6,
+            -2,
+            -6,
+          ],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <HeartIcon />
+      </motion.div>
+
+
+      <motion.div
+        className="doodle doodle-two"
+        animate={{
+          y: [
+            0,
+            7,
+            0,
+          ],
+        }}
+        transition={{
+          duration: 13,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <MusicIcon />
+      </motion.div>
+
+
+      <div className="ink-particles">
+
+        {
+          Array.from({
+            length: 10,
+          }).map(
+            (_, index) => (
+
+              <motion.i
+                key={index}
+                style={{
+                  left:
+                    `${
+                      8 +
+                      (
+                        (
+                          index *
+                          19
+                        ) %
+                        84
+                      )
+                    }%`,
+                  top:
+                    `${
+                      10 +
+                      (
+                        (
+                          index *
+                          21
+                        ) %
+                        78
+                      )
+                    }%`,
+                }}
+                animate={{
+                  y: [
+                    0,
+                    -7,
+                    0,
+                  ],
+                  opacity: [
+                    0.05,
+                    0.14,
+                    0.05,
+                  ],
+                }}
+                transition={{
+                  duration:
+                    6 +
+                    (
+                      index %
+                      4
+                    ),
+                  delay:
+                    index *
+                    0.2,
+                  repeat:
+                    Infinity,
+                  ease:
+                    "easeInOut",
+                }}
+              />
+
+            )
+          )
+        }
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+
+/* =========================================================
+   ICONOS
+   ========================================================= */
+
+function HeartIcon() {
+
+  return (
+
+    <svg
+      viewBox="0 0 64 64"
+      className="line-icon"
+    >
+
+      <path
+        d="M32 52 C25 45 11 35 11 23 C11 15 17 11 23 11 C28 11 31 14 32 18 C34 14 37 11 42 11 C49 11 54 16 54 23 C54 35 40 45 32 52 Z"
+      />
+
+    </svg>
+
+  );
+
+}
+
+
+function MusicIcon() {
+
+  return (
+
+    <svg
+      viewBox="0 0 64 64"
+      className="line-icon"
+    >
+
+      <path
+        d="M25 44 V15 L48 10 V38"
+      />
+
+      <path
+        d="M25 24 L48 19"
+      />
+
+      <ellipse
+        cx="18"
+        cy="46"
+        rx="7"
+        ry="5"
+      />
+
+      <ellipse
+        cx="41"
+        cy="40"
+        rx="7"
+        ry="5"
+      />
+
+    </svg>
+
+  );
+
+}
+
+
+function PinIcon() {
+
+  return (
+
+    <svg
+      viewBox="0 0 64 64"
+      className="pin-icon"
+    >
+
+      <path
+        d="M32 55 C25 45 16 36 16 26 C16 17 23 10 32 10 C41 10 48 17 48 26 C48 36 39 45 32 55 Z"
+      />
+
+      <circle
+        cx="32"
+        cy="26"
+        r="6"
+      />
+
+    </svg>
+
+  );
+
+}
