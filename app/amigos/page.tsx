@@ -523,15 +523,13 @@ function CelebrationScreen({
         <div className="timeline-item">
 
           <div className="timeline-time">
-            13hs
+            13 hs
           </div>
 
           <div className="timeline-info">
-
             <div className="timeline-title">
               Civil (Belgrano 2867)
             </div>
-
           </div>
 
         </div>
@@ -557,7 +555,7 @@ function CelebrationScreen({
             }}
           >
 
-            Te esperamos
+            16 HS A 20 HS
 
           </motion.div>
 
@@ -567,7 +565,7 @@ function CelebrationScreen({
 
           <p className="friends-meeting-text">
 
-            Entre las 16 y las 20 hs
+            CELEBRAMOS EN LA QUINTA
 
           </p>
 
@@ -584,15 +582,13 @@ function CelebrationScreen({
           <PinIcon />
 
           <span>
-
             {
-              "Calle 213 2370 \u00B7 Abrir ubicaci\u00F3n"
+              "Calle 213 2370 · Abrir ubicación"
             }
-
           </span>
 
           <b>
-            {"\u2192"}
+            {"→"}
           </b>
 
         </a>
